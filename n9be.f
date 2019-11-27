@@ -2,13 +2,13 @@
       implicit none
       contains
 
-      subroutine n9BeAB(ir,E,VAB,sopot)
-      use mesh,only:hcm
+      subroutine n9BeAB(ir,E,VAB)
+      use mesh,only:rr
       implicit none
       complex*16 :: VAB
       integer :: ir
       real*8 :: E,vr,r0,ar,wv,ws,rw,aw,vso,rso,aso,alfa,r,A
-      real*8 :: pot,impot,sopot
+      real*8 :: pot,impot
 c      write(0,*) 'Write r0,dr,rmax'
 c      read(*,*) ri,dr,rmax
 c      nr=nint((rmax-ri)/dr+1d0)
@@ -31,11 +31,11 @@ c      read(*,*) E
       alfa=3.2-0.02*E
       endif
 
-      if(E.lt.2d0) then
-      vso=7.9d0
-      else
+c      if(E.lt.2d0) then
+c      vso=7.9d0
+c      else
       vso=5.5
-      endif
+c      endif
 
       if (E.lt.3d0) then
       vr=32d0-0.377*E
@@ -71,7 +71,7 @@ c      read(*,*) E
 c      open(5,file='potn9Be.pot')
 c      do ir=1,nr
 c      r=ri+dr*(ir-1d0)
-       r=ir*hcm
+       r=rr(ir)
        if(ir==0) r=0.00000001
        pot=-vr/(1d0+exp((r-r0*A**0.333333)/ar))-16*alfa*
      & exp(2d0*(r-r0*A**0.33333)/ar)/(1d0+exp((r-r0*A**0.333333)/ar))**4
@@ -81,8 +81,6 @@ c      r=ri+dr*(ir-1d0)
 
 
        VAB=cmplx(pot,impot,kind=8)
-       sopot=-2d0*vso/r/aso*exp(-(r-rso*A**0.333333)/aso)/
-     & (1d0+exp(-(r-rso*A**0.333333)/aso))**2
 
 
 
